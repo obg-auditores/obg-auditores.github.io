@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OBG·IA Portal de clientes</title>
+<meta name="description" content="OBG·IA, portal de clientes de OBG Auditores SpA.">
+<meta name="robots" content="noindex, nofollow">
+<meta name="theme-color" content="#00463c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%2300463c'/%3E%3Ctext x='32' y='41' font-family='Arial,sans-serif' font-weight='700' font-size='22' text-anchor='middle' fill='%23e6f5c8'%3EOBG%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+/* VOICE work: a client audit portal, sober and exact, like the big four's client sites
+   IDEA the secure engagement room an audit firm opens for a client's board
+   PICTURE login: a journal ledger being scanned with flagged entries; portal: the engagement timeline at true time scale
+   COLOUR deep green #00463c ground for first screens, white, lime-white #e6f5c8, coral #ff6f59 for high risk
+   TYPE Inter Tight 700 + Inter
+   LAYOUT laptop: login split brand/form, portal bands; phone: brand band, form, then stacked bands */
+:root{color-scheme:light dark;--bg:light-dark(#ffffff,#0c1613);--ink:light-dark(#10201c,#e8efec);--mute:light-dark(#5b6b66,#9fb1ab);--line:light-dark(#dfe6e3,#243531);--soft:light-dark(#f2f6f4,#13211d);--g:#00463c;--g2:light-dark(#2f6f5f,#7fbfa9);--lime:#e6f5c8;--coral:#ff6f59;--coralink:light-dark(#c6412c,#ff8f7d)}
+:root[data-theme=light]{color-scheme:light}
+:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Inter,system-ui,sans-serif;overflow-x:clip}
+h1,h2,h3{font-family:"Inter Tight",Inter,sans-serif;font-weight:700;letter-spacing:-.02em;line-height:1.08;margin:0;text-wrap:balance}
+button,input{font:inherit}
+.mark{display:inline-flex;gap:3px}
+.mark b{width:22px;height:22px;border-radius:5px;display:grid;place-items:center;font:700 12px "Inter Tight",sans-serif;background:var(--lime);color:var(--g)}
+.mark b:nth-child(2){background:var(--coral);color:#fff}
+.brand{display:flex;align-items:center;gap:10px;font:700 18px "Inter Tight",sans-serif}
+.brand small{display:block;font:500 13px Inter,sans-serif;opacity:.8}
+/* login */
+#login{min-height:100%;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr)}
+.side{background:var(--g);color:#fff;padding:clamp(24px,4vw,56px);display:grid;grid-template-rows:auto 1fr auto;gap:28px}
+.side h1{font-size:clamp(28px,4vw,48px);max-width:14ch}
+.side .mid{display:flex;flex-direction:column}
+.side .mid .scan{flex:1}
+.side p{color:var(--lime);max-width:38ch;margin:10px 0 0}
+.scan{position:relative;border-radius:14px;overflow:hidden;background:#003a32;min-height:240px}
+.scan svg{position:absolute;inset:0;width:100%;height:100%}
+.patent{display:flex;flex-wrap:wrap;gap:8px 18px;font-size:13px;color:var(--lime)}
+.patent span{display:inline-flex;align-items:center;gap:6px}
+.patent span::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--lime)}
+.formside{display:grid;place-items:center;padding:clamp(24px,5vw,64px) max(5vw,16px)}
+form{width:min(380px,100%);display:grid;gap:16px}
+form h2{font-size:30px}
+form .sub{color:var(--mute);margin:-6px 0 6px}
+label{font-weight:600;font-size:14px;display:grid;gap:6px}
+.field{display:flex;align-items:center;border:1.5px solid var(--line);border-radius:10px;background:var(--bg)}
+.field:focus-within{border-color:var(--g2);box-shadow:0 0 0 3px color-mix(in srgb,var(--g2) 25%,transparent)}
+.field input{flex:1;border:0;background:transparent;color:var(--ink);font-size:16px;padding:12px 14px;min-height:48px;outline:0}
+.field button{border:0;background:none;color:var(--g2);font-weight:600;font-size:14px;padding:0 14px;min-height:44px;cursor:pointer}
+.go{min-height:50px;border:0;border-radius:10px;background:var(--g);color:#fff;font-weight:600;cursor:pointer}
+.go:hover{background:#00594c}
+.go:focus-visible,.link:focus-visible,.field button:focus-visible,.out:focus-visible{outline:3px solid var(--coral);outline-offset:2px}
+.err{color:var(--coralink);font-size:14px;min-height:21px;margin:-6px 0}
+.link{background:none;border:0;color:var(--g2);font-weight:600;font-size:14px;padding:6px 0;cursor:pointer;justify-self:start}
+.help{font-size:14px;color:var(--mute);margin:-8px 0 0}
+.lock{display:flex;gap:10px;align-items:flex-start;font-size:13px;color:var(--mute);border-top:1px solid var(--line);padding-top:14px}
+.legal{font-size:13px;color:var(--mute);text-align:left}
+/* loading */
+#wait{position:fixed;inset:0;background:var(--g);color:#fff;display:none;place-items:center;z-index:9}
+#wait div{width:min(340px,80vw);display:grid;gap:14px}
+#wait p{margin:0;color:var(--lime)}
+.bar{height:6px;border-radius:3px;background:#0a5e51;overflow:hidden}
+.bar i{display:block;height:100%;width:0;background:var(--lime);transition:width 1.2s ease}
+/* portal */
+#app{display:none}
+.top{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px max(5vw,16px);background:var(--g);color:#fff;border-bottom:1px solid #0b5a4d}
+.who{display:flex;align-items:center;gap:12px;font-size:14px}
+.who .c{color:var(--lime)}
+.out{min-height:40px;border:1px solid #3d7e70;background:none;color:#fff;border-radius:8px;padding:0 14px;cursor:pointer}
+.band{padding:clamp(28px,4vw,56px) max(5vw,16px)}
+.in{max-width:1240px;margin:0 auto}
+.hero{background:var(--g);color:#fff}
+.hero .ctx{color:var(--lime);font-size:15px;margin-bottom:10px}
+.hero h1{font-size:clamp(30px,4.2vw,48px);max-width:22ch}
+.hero .find{font-size:18px;max-width:60ch;margin:14px 0 26px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(10.5em,1fr));gap:1px;background:#1d6457;border-radius:12px;overflow:hidden}
+.kpis div{background:#00524a;padding:14px 16px}
+.kpis b{display:block;font:700 clamp(24px,3vw,32px) "Inter Tight",sans-serif;white-space:nowrap}
+.kpis span{font-size:13px;color:var(--lime)}
+h2{font-size:clamp(24px,2.6vw,30px)}
+.lead{color:var(--mute);margin:6px 0 18px;max-width:70ch}
+.gantt{display:grid;gap:6px}
+.g-row{display:grid;grid-template-columns:13em minmax(0,1fr);gap:14px;align-items:center}
+.g-lab b{display:block;font-size:15px}
+.g-lab span{font-size:13px;color:var(--mute);white-space:nowrap}
+.g-track{position:relative;height:34px;background:var(--soft);border-radius:8px}
+.g-track i{position:absolute;top:6px;bottom:6px;border-radius:5px;background:var(--g2)}
+.g-track i.done{background:var(--coral)}
+.g-track .t{position:absolute;top:-4px;bottom:-4px;width:2px;background:var(--coral)}
+.g-track .m{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;transform:rotate(45deg);background:var(--ink)}
+.g-axis{position:relative;height:22px;font-size:13px;color:var(--mute)}
+.g-axis span{position:absolute;transform:translateX(-50%);white-space:nowrap}
+.g-axis span.today{color:var(--coralink);font-weight:600}
+.cols{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);align-items:start}
+.alert{display:grid;grid-template-columns:7.2em minmax(0,1fr);gap:16px;padding:16px 0;border-top:1px solid var(--line)}
+.alert .n{font:700 clamp(24px,2.6vw,28px)/1 "Inter Tight",sans-serif;color:var(--g2);white-space:nowrap}
+.alert.hi .n{color:var(--coralink)}
+.alert h3{font-size:18px;margin-bottom:4px}
+.alert p{margin:0 0 8px;font-size:15px}
+.meta{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:13px;color:var(--mute)}
+.chip{display:inline-block;border-radius:20px;padding:1px 10px;font-size:13px;font-weight:600;white-space:nowrap}
+.chip.A{background:var(--coral);color:#fff}
+.chip.M{background:color-mix(in srgb,var(--g2) 18%,transparent);color:var(--g2)}
+.chip.B{background:var(--soft);color:var(--mute)}
+.chip.ok{background:var(--lime);color:var(--g)}
+.panel{background:var(--soft);border-radius:14px;padding:20px}
+.rb{display:grid;grid-template-columns:9.5em minmax(0,1fr) 4.6em;gap:10px;align-items:center;font-size:14px;padding:5px 0}
+.rb .tr{height:14px;border-radius:7px;background:var(--line)}
+.rb .tr i{display:block;height:100%;border-radius:7px}
+.rb .v{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ask{margin-top:22px;border:1.5px dashed var(--line);border-radius:14px;padding:18px}
+.ask h3{font-size:18px}
+.ask p{font-size:14px;color:var(--mute);margin:6px 0 12px}
+.ask .q{display:flex;flex-wrap:wrap;gap:8px}
+.ask .q span{border:1px solid var(--line);border-radius:20px;padding:4px 12px;font-size:13px;color:var(--mute)}
+.ask .fake{margin-top:12px;display:flex;align-items:center;justify-content:space-between;gap:10px;border-radius:10px;background:var(--bg);border:1px solid var(--line);padding:10px 14px;color:var(--mute);font-size:14px}
+.scroll{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:15px}
+th{text-align:left;font-size:13px;color:var(--mute);font-weight:600;padding:8px 10px;border-bottom:1px solid var(--line)}
+td{padding:10px;border-bottom:1px solid var(--line);vertical-align:top}
+td.d{white-space:nowrap;font-variant-numeric:tabular-nums}
+.list{display:grid}
+.list div{display:grid;grid-template-columns:6.4em minmax(0,1fr) auto;gap:12px;padding:11px 0;border-bottom:1px solid var(--line);font-size:15px;align-items:baseline}
+.list .d{white-space:nowrap;color:var(--mute);font-size:14px;font-variant-numeric:tabular-nums}
+.steps{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.steps div{background:var(--soft);border-radius:14px;padding:20px}
+.steps b{display:block;font:700 20px "Inter Tight",sans-serif;margin-bottom:6px}
+.steps p{margin:0;font-size:15px}
+footer{background:var(--g);color:var(--lime);font-size:13px}
+footer p{margin:0 0 6px}
+@media(min-width:901px){.cols>div:last-child{position:sticky;top:84px}}
+@media(max-width:900px){#login{grid-template-columns:minmax(0,1fr)}.side{grid-template-rows:auto auto auto}.scan{min-height:170px}.cols{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:700px){.who .c{display:none}.steps{grid-template-columns:minmax(0,1fr)}.g-row{grid-template-columns:minmax(0,1fr);gap:4px}.g-axis{margin-left:0!important}}
+@media(max-width:600px){.side{padding:18px 16px 20px;gap:14px}.side p{font-size:14px;margin-top:6px}.side .mid .scan{min-height:96px;margin-top:14px!important}.patent{font-size:12px;gap:4px 12px}.kpis div:last-child{grid-column:1/-1}.g-axis span.today{display:none}table{font-size:14px}.stack thead{display:none}.stack tr{display:grid;padding-block:10px;border-bottom:1px solid var(--line)}.stack td{display:flex;justify-content:space-between;gap:12px;border:0;padding:3px 0}.stack td::before{content:attr(data-l);color:var(--mute);font-size:13px}.alert{grid-template-columns:minmax(0,1fr);gap:6px}.rb{grid-template-columns:7.5em minmax(0,1fr) 4.4em}.list div{grid-template-columns:minmax(0,1fr) auto}.list .d{grid-column:1/-1}}
+@media(prefers-reduced-motion:reduce){.sweep{display:none}.bar i{transition:none}}
+</style>
+<script>new MutationObserver(()=>{for(const c of document.querySelectorAll('.stack td:not([data-l])')){let i=0,p=c;while(p=p.previousElementSibling)i+=p.colSpan;c.dataset.l=c.closest('table').rows[0].cells[i]?.textContent||''}}).observe(document,{childList:true,subtree:true})</script>
+</head>
+<body>
+
+<section id="login">
+  <div class="side">
+    <div class="brand"><span class="mark"><b>O</b><b>B</b><b>G</b></span><div>OBG·IA<small>OBG Auditores SpA</small></div></div>
+    <div class="mid">
+      <h1>Su auditoría, con evidencia a la vista.</h1>
+      <p>Plataforma de auditoría con inteligencia artificial propia: analiza cada asiento, señala lo inusual y deja la decisión en manos del auditor.</p>
+      <div class="scan" style="margin-top:24px" aria-hidden="true"><svg id="ledger" preserveAspectRatio="xMidYMin slice"></svg></div>
+    </div>
+    <div class="patent"><span>Tecnología propia patentada</span><span>Acceso exclusivo de clientes</span><span>Revisión humana obligatoria</span></div>
+  </div>
+  <div class="formside">
+    <form id="f" novalidate autocomplete="off">
+      <h2>Portal de clientes</h2>
+      <p class="sub">Ingrese con las credenciales que le entregó su socio responsable.</p>
+      <label for="u">Usuario<span class="field"><input id="u" name="u" autocomplete="off" autocapitalize="none" spellcheck="false"></span></label>
+      <label for="p">Clave<span class="field"><input id="p" name="p" type="password" autocomplete="off"><button type="button" id="show" aria-controls="p">Mostrar</button></span></label>
+      <div class="err" id="err" role="alert"></div>
+      <button class="go" type="submit">Ingresar</button>
+      <button class="link" type="button" id="forgot">¿Olvidó su clave?</button>
+      <p class="help" id="forgotmsg" hidden>Por seguridad, las claves se entregan solo de forma presencial. Solicítela a su socio responsable de OBG.</p>
+      <div class="lock"><svg width="16" height="18" viewBox="0 0 16 18" aria-hidden="true" style="flex:none;margin-top:2px"><rect x="1" y="8" width="14" height="10" rx="2" fill="currentColor"/><path d="M4 8V5a4 4 0 0 1 8 0v3" fill="none" stroke="currentColor" stroke-width="2"/></svg><span>Sesión confidencial. La información de este portal es de uso exclusivo del directorio del cliente y del equipo de auditoría.</span></div>
+      <p class="legal">© 2026 OBG Auditores SpA · OBG·IA es tecnología propia patentada de OBG · Prototipo académico, Fundamentos de Auditoría, Universidad Santo Tomás.</p>
+    </form>
+  </div>
+</section>
+
+<div id="wait" aria-live="polite"><div><div class="brand"><span class="mark"><b>O</b><b>B</b><b>G</b></span><div>OBG·IA</div></div><p id="waitmsg">Verificando credenciales…</p><div class="bar"><i id="waitbar"></i></div></div></div>
+
+<div id="app">
+  <header class="top">
+    <div class="brand"><span class="mark"><b>O</b><b>B</b><b>G</b></span><div>OBG·IA<small>Portal de clientes</small></div></div>
+    <div class="who"><span class="c">Celulosa Arauco y Constitución S.A.</span><span>Directorio</span><button class="out" id="out" type="button">Salir</button></div>
+  </header>
+
+  <section class="band hero"><div class="in">
+    <div class="ctx">Celulosa Arauco y Constitución S.A. · Vista previa del encargo · Propuesta del 24 de noviembre de 2026</div>
+    <h1>Auditoría de los estados financieros consolidados al 31 de diciembre de 2026</h1>
+    <p class="find">OBG·IA ya analizó sus estados financieros 2025: encontró 6 alertas, de las cuales 4 son riesgos significativos que el socio responsable revisó y llevó al plan de auditoría.</p>
+    <div class="kpis">
+      <div><b>6</b><span>Alertas de OBG·IA</span></div>
+      <div><b>4</b><span>Riesgos significativos</span></div>
+      <div><b>US$ 60,8 MM</b><span>Materialidad global</span></div>
+      <div><b>1.030</b><span>Horas planificadas</span></div>
+      <div><b>Feb 2027</b><span>Opinión de auditoría</span></div>
+    </div>
+  </div></section>
+
+  <section class="band"><div class="in">
+    <h2>Cronograma del encargo</h2>
+    <p class="lead">Las cinco etapas a escala real de tiempo. La línea roja marca hoy; el rombo, la emisión de la opinión antes de la sesión de directorio.</p>
+    <div class="gantt" id="gantt"></div>
+  </div></section>
+
+  <section class="band" style="padding-top:0"><div class="in cols">
+    <div>
+      <h2>Alertas de OBG·IA sobre sus estados financieros 2025</h2>
+      <p class="lead">Cada alerta se apoya en una cifra de los estados financieros y fue revisada por el socio antes de entrar al plan.</p>
+      <div id="alerts"></div>
+    </div>
+    <div>
+      <div class="panel">
+        <h3 style="font-size:20px">Saldos bajo revisión, por nivel de riesgo</h3>
+        <p class="lead" style="margin-bottom:10px;font-size:14px">Millones de dólares al 31.12.2025. Ingresos corresponde al ejercicio 2025.</p>
+        <div id="bars"></div>
+        <div class="legend"><span class="chip A">Alto</span><span class="chip M">Moderado</span><span class="chip B">Bajo</span></div>
+      </div>
+      <div class="ask">
+        <h3>Consulte a OBG·IA</h3>
+        <p>Preguntas en lenguaje natural sobre el avance y los hallazgos de su auditoría. Se habilita para el directorio al firmar la carta de contratación.</p>
+        <div class="q"><span>¿Qué riesgos encontraron?</span><span>¿Qué documentos faltan?</span><span>¿Cuándo es la próxima reunión?</span></div>
+        <div class="fake"><span>Escriba su consulta…</span><span class="chip B">Disponible al aceptar</span></div>
+      </div>
+    </div>
+  </div></section>
+
+  <section class="band" style="padding-top:0"><div class="in cols">
+    <div>
+      <h2>Información que solicitaremos</h2>
+      <p class="lead">Al aceptar la propuesta, cada solicitud llega aquí con su responsable y su fecha.</p>
+      <div class="scroll"><table class="stack"><thead><tr><th>Documento</th><th>Área de Arauco</th><th>Fecha</th><th>Estado</th></tr></thead><tbody id="pbc"></tbody></table></div>
+    </div>
+    <div>
+      <h2>Directorio y documentos</h2>
+      <p class="lead">Reuniones con el directorio (NIA 260) y entregables del encargo.</p>
+      <div class="list" id="meet"></div>
+      <div class="list" id="docs" style="margin-top:18px"></div>
+    </div>
+  </div></section>
+
+  <section class="band" style="padding-top:0"><div class="in">
+    <h2>Cómo trabaja OBG·IA</h2>
+    <p class="lead">La inteligencia artificial amplía la evidencia; el juicio y la firma siguen siendo del auditor.</p>
+    <div class="steps">
+      <div><b>Analiza</b><p>Lee los estados financieros, sus notas y el libro diario completo, y compara cada cifra con el año anterior y con la industria.</p></div>
+      <div><b>Señala</b><p>Marca variaciones inusuales, asientos atípicos y estimaciones sensibles, cada una con la cifra y la nota que la respaldan.</p></div>
+      <div><b>El auditor decide</b><p>Ninguna alerta llega al plan ni al informe sin la revisión del socio responsable. Independencia y confidencialidad según la Ley 18.045 y la NIA 220.</p></div>
+    </div>
+  </div></section>
+
+  <footer class="band"><div class="in">
+    <p>© 2026 OBG Auditores SpA · OBG·IA es tecnología propia patentada de OBG · Socio responsable: Gregory Gutiérrez · Equipo: Leyberson Ochoa y Adonis Badaraco.</p>
+    <p>Prototipo académico para la asignatura Fundamentos de Auditoría, Universidad Santo Tomás. Las cifras de Arauco provienen de sus estados financieros consolidados públicos al 31 de diciembre de 2025.</p>
+  </div></footer>
+</div>
+
+<script>
+{
+const USER='directorio.arauco', PASS='OBG-2026';
+const $=s=>document.querySelector(s);
+
+/* ledger scan picture */
+const svg=$('#ledger');
+let seed=7;const rnd=()=>(seed=seed*16807%2147483647)/2147483647;
+const W=600,H=520;svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+let rows='';const flags=[3,8,12,17,21];
+for(let i=0;i<25;i++){const y=18+i*20;const f=flags.includes(i);
+  rows+=`<rect x="24" y="${y}" width="46" height="8" rx="4" fill="#2b7a69"/>`+
+  `<rect x="86" y="${y}" width="${120+rnd()*150}" height="8" rx="4" fill="${f?'#ff6f59':'#5fa08f'}" opacity="${f?1:.8}"/>`+
+  `<rect x="${W-24-(50+rnd()*60)}" y="${y}" width="${50+rnd()*60}" height="8" rx="4" fill="#e6f5c8" opacity=".85"/>`+
+  (f?`<circle cx="${W-12}" cy="${y+4}" r="5" fill="#ff6f59"/>`:'');}
+svg.innerHTML=`<rect width="${W}" height="${H}" fill="#003a32"/>${rows}<g class="sweep"><rect x="0" y="-40" width="${W}" height="40" fill="#e6f5c8" opacity=".14"/><rect x="0" y="-2" width="${W}" height="2" fill="#e6f5c8"/><animateTransform attributeName="transform" type="translate" values="0 0;0 ${H+40};0 0" dur="7s" repeatCount="indefinite"/></g>`;
+
+/* data */
+const alerts=[
+ {n:'2,5×',l:'A',t:'Activos biológicos',d:'La ganancia por valor razonable de los bosques (US$ 204,6 MM) equivale a 2,5 veces la utilidad antes de impuestos (US$ 80,7 MM). Se mide con un modelo de nivel 3.',r:'Recálculo independiente del modelo y experto forestal (NIA 540 y NIA 620).',src:'Nota 20'},
+ {n:'×3,2',l:'A',t:'Obras en curso: Proyecto Sucuriú',d:'Las obras en curso pasaron de US$ 725,7 MM a US$ 2.316,7 MM, con US$ 3.562,0 MM adicionales comprometidos.',r:'Prueba de adiciones, intereses capitalizados (NIC 23) y visita a la obra.',src:'Notas 7 y 12'},
+ {n:'+30%',l:'A',t:'Deuda financiera',d:'La deuda financiera llegó a US$ 8.573,8 MM el mismo año en que la utilidad cayó 91,4%.',r:'Confirmaciones, valorización de derivados y recálculo de resguardos.',src:'Nota 23'},
+ {n:'Corte',l:'A',t:'Corte de ventas de exportación',d:'En las ventas CFR y CIF el control se transfiere al embarcar: la fecha de carga define el ejercicio. Riesgo de fraude presunto en ingresos.',r:'Prueba de corte con conocimientos de embarque (NIA 240).',src:'Nota 1'},
+ {n:'Nuevo',l:'M',t:'Anticipos a productores forestales',d:'Aparece un saldo de US$ 443,1 MM que no existía en 2024, que se liquida con entregas futuras de madera.',r:'Revisión de contratos, análisis de control y confirmación de saldos.',src:'Nota 25'},
+ {n:'49,3%',l:'M',t:'Tasa efectiva de impuestos',d:'La tasa efectiva subió desde 26,4% en 2024, y hay US$ 240,9 MM en activos diferidos por pérdidas tributarias.',r:'Conciliación de tasa por país y recuperabilidad, con especialista tributario.',src:'Nota 18'}];
+const lvl={A:'Alto',M:'Moderado',B:'Bajo'};
+$('#alerts').innerHTML=alerts.map(a=>`<div class="alert ${a.l=='A'?'hi':''}"><div class="n">${a.n}</div><div><h3>${a.t}</h3><p>${a.d}</p><p><b>En el plan:</b> ${a.r}</p><div class="meta"><span class="chip ${a.l}">${lvl[a.l]}</span><span>${a.src}</span><span>Revisado por Gregory Gutiérrez, socio responsable</span></div></div></div>`).join('');
+
+const bal=[['Plantas y equipos en operación',8808.2,'M'],['Deuda financiera',8573.8,'A'],['Ingresos ordinarios',6084.1,'A'],['Activos biológicos',3337.9,'A'],['Obras en curso',2316.7,'A'],['Impuestos diferidos',1550.1,'M'],['Inventarios',1516.6,'M'],['Efectivo',1284.1,'B'],['Derechos de uso',1003.7,'M'],['Anticipos a productores',443.1,'M']];
+const col={A:'var(--coral)',M:'var(--g2)',B:'color-mix(in srgb,var(--mute) 55%,transparent)'};
+const fmt=v=>v.toLocaleString('es-CL',{minimumFractionDigits:1,maximumFractionDigits:1});
+$('#bars').innerHTML=bal.map(b=>`<div class="rb"><span>${b[0]}</span><span class="tr"><i style="width:${(b[1]/8808.2*100).toFixed(1)}%;background:${col[b[2]]}"></i></span><span class="v">${fmt(b[1])}</span></div>`).join('');
+
+const pbc=[['Modelo de valorización de activos biológicos y catastro forestal','Gerencia Forestal','30.11.2026'],['Contratos, estados de pago y presupuesto del Proyecto Sucuriú','Gerencia de Proyectos','30.11.2026'],['Contratos de crédito, bonos y cálculo de resguardos','Gerencia de Finanzas','30.11.2026'],['Autorización para contactar al auditor predecesor','Directorio','30.11.2026'],['Documentación de derivados y coberturas','Gerencia de Finanzas','07.12.2026'],['Actas de directorio y juntas de accionistas 2026','Secretaría del Directorio','07.12.2026'],['Informes de abogados sobre juicios y contingencias','Gerencia Legal','14.12.2026'],['Cálculo de impuestos corrientes y diferidos por país','Contabilidad e Impuestos','14.12.2026']];
+$('#pbc').innerHTML=pbc.map(p=>`<tr><td>${p[0]}</td><td>${p[1]}</td><td class="d">${p[2]}</td><td><span class="chip B">Programada</span></td></tr>`).join('');
+
+const meet=[['24.11.2026','Presentación de la propuesta','ok','Realizada'],['02.12.2026','Presentación del plan y de los riesgos significativos','B','Programada'],['18.12.2026','Cierre de la visita interina','B','Programada'],['24.02.2027','Presentación de resultados y opinión','B','Programada']];
+$('#meet').innerHTML=meet.map(m=>`<div><span class="d">${m[0]}</span><span>${m[1]}</span><span class="chip ${m[2]}">${m[3]}</span></div>`).join('');
+const docs=[['24.11.2026','Propuesta de servicios profesionales','ok','Disponible'],['24.11.2026','Declaración de independencia del equipo','ok','Disponible'],['Dic 2026','Plan de auditoría y matriz de riesgos','B','Al aceptar'],['Feb 2027','Informe de auditoría y asuntos clave','B','Feb 2027'],['Mar 2027','Informe de control interno (NIA 265)','B','Mar 2027']];
+$('#docs').innerHTML=docs.map(m=>`<div><span class="d">${m[0]}</span><span>${m[1]}</span><span class="chip ${m[2]}">${m[3]}</span></div>`).join('');
+
+/* gantt at true time scale */
+const D=s=>new Date(s+'T12:00:00');const t0=D('2026-11-16'),t1=D('2027-03-15');const pos=s=>((D(s)-t0)/(t1-t0)*100).toFixed(2);
+const today='2026-11-24',opinion='2027-02-24';
+const st=[['Planificación','30 nov – 11 dic','2026-11-30','2026-12-11'],['Riesgos y control interno','7 – 18 dic','2026-12-07','2026-12-18'],['Visita interina','14 – 23 dic','2026-12-14','2026-12-23'],['Visita final','11 ene – 12 feb','2027-01-11','2027-02-12'],['Conclusión e informes','15 feb – 12 mar','2027-02-15','2027-03-12']];
+const ticks=[['2026-12-01','dic'],['2027-01-01','ene'],['2027-02-01','feb'],['2027-03-01','mar']];
+const axis=`<div class="g-row"><span></span><div class="g-axis">${ticks.map(k=>`<span style="left:${pos(k[0])}%">${k[1]}</span>`).join('')}<span class="today" style="left:${pos(today)}%">hoy</span></div></div>`;
+$('#gantt').innerHTML=axis+st.map((s,i)=>`<div class="g-row"><div class="g-lab"><b>${s[0]}</b><span>${s[1]}</span></div><div class="g-track"><i style="left:${pos(s[2])}%;width:${(pos(s[3])-pos(s[2])).toFixed(2)}%"></i><span class="t" style="left:${pos(today)}%"></span>${i==4?`<span class="m" style="left:${pos(opinion)}%" title="Opinión: 24.02.2027"></span>`:''}</div></div>`).join('');
+
+/* session */
+const show=on=>{$('#login').style.display=on?'none':'grid';$('#app').style.display=on?'block':'none';window.scrollTo(0,0)};
+let saved=false;try{saved=sessionStorage.getItem('obg-ia')==='1'}catch(e){}
+if(saved)show(true);
+$('#show').addEventListener('click',()=>{const p=$('#p');const h=p.type==='password';p.type=h?'text':'password';$('#show').textContent=h?'Ocultar':'Mostrar'});
+$('#forgot').addEventListener('click',()=>{$('#forgotmsg').hidden=false});
+$('#f').addEventListener('submit',e=>{
+  e.preventDefault();
+  const u=$('#u').value.trim().toLowerCase(),p=$('#p').value.trim();
+  if(!u||!p){$('#err').textContent='Ingrese su usuario y su clave.';return}
+  if(u!==USER||p!==PASS){$('#err').textContent='Usuario o clave incorrectos.';$('#p').value='';$('#p').focus();return}
+  $('#err').textContent='';$('#p').value='';
+  const w=$('#wait');w.style.display='grid';const bar=$('#waitbar');
+  requestAnimationFrame(()=>{bar.style.width='55%'});
+  setTimeout(()=>{$('#waitmsg').textContent='Abriendo el expediente de Celulosa Arauco y Constitución S.A.…';bar.style.width='100%'},700);
+  setTimeout(()=>{w.style.display='none';bar.style.width='0';$('#waitmsg').textContent='Verificando credenciales…';try{sessionStorage.setItem('obg-ia','1')}catch(e){}show(true)},1700);
+});
+$('#out').addEventListener('click',()=>{try{sessionStorage.removeItem('obg-ia')}catch(e){}$('#u').value='';show(false)});
+}
+</script>
+</body>
+</html>
